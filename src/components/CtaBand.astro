@@ -1,0 +1,23 @@
+---
+interface Props { title?: string; text?: string }
+const {
+  title = 'Kezdjük el!',
+  text = 'Írj pár sort a céljaidról, és egy ingyenes, 20 perces konzultáción megbeszéljük, hogyan tudok segíteni.',
+} = Astro.props;
+---
+<section class="section band">
+  <div class="container inner">
+    <div>
+      <h2>{title}</h2>
+      <p>{text}</p>
+    </div>
+    <a class="btn btn-primary" href="/kapcsolat">Ingyenes konzultáció</a>
+  </div>
+</section>
+
+<style>
+  .band { background: var(--blue); color: var(--white); }
+  .inner { display: grid; gap: 1.5rem; align-items: center; }
+  @media (min-width: 720px) { .inner { grid-template-columns: 1fr auto; } }
+  p { margin: 0; max-width: 36rem; color: #dbe4ff; }
+</style>

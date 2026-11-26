@@ -1,0 +1,114 @@
+---
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+// TODO(Alex): fill in prices if you want them on the site, e.g. price: '12 000 Ft / alkalom'.
+const services = [
+  {
+    name: 'Személyi edzés',
+    tagline: 'Négyszemközt, az edzőteremben',
+    price: '',
+    points: [
+      'Technikai oktatás és korrekció minden gyakorlatnál',
+      'Rád szabott terhelés, ízületi panaszokat figyelembe véve',
+      'Edzésterv a köztes napokra is, az alkalmazásban',
+      'Időpontfoglalás közvetlenül az appból',
+    ],
+  },
+  {
+    name: 'Online coaching',
+    tagline: 'Bárhol edzel, én figyelem a haladásod',
+    price: '',
+    points: [
+      'Heti frissülő edzésterv az alkalmazásban',
+      'Visszajelzés az elvégzett edzéseidre',
+      'Rendszeres online konzultáció',
+      'Erő- és futóedzés kombinálható',
+    ],
+    featured: true,
+  },
+  {
+    name: 'Egyéni edzésterv',
+    tagline: 'Önálló edzőknek',
+    price: '',
+    points: [
+      'Felmérés a céljaid és lehetőségeid alapján',
+      'Több hetes, felépített program',
+      'Az alkalmazás teljes funkcionalitásával',
+      'Egy követő konzultáció a program közepén',
+    ],
+  },
+];
+---
+<Base title="Szolgáltatások" description="Személyi edzés, online coaching és egyéni edzésterv az Alexercise-szal.">
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Szolgáltatások</span>
+      <h1>Válaszd a hozzád illőt</h1>
+      <p class="lead">Mindegyik csomag ingyenes konzultációval indul, és mindegyikhez jár az Alexercise alkalmazás.</p>
+
+      <div class="grid grid-3 plans">
+        {services.map((s) => (
+          <article class:list={['card', 'plan', { featured: s.featured }]}>
+            {s.featured && <span class="badge">Népszerű</span>}
+            <h2>{s.name}</h2>
+            <p class="muted">{s.tagline}</p>
+            <ul class="check-list">
+              {s.points.map((p) => <li>{p}</li>)}
+            </ul>
+            <p class="price">{s.price || 'Ár: egyeztetés alapján'}</p>
+            <a class:list={['btn', s.featured ? 'btn-primary' : 'btn-secondary']} href={`/kapcsolat?szolgaltatas=${encodeURIComponent(s.name)}`}>Érdekel</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container narrow">
+      <h2>Gyakori kérdések</h2>
+      <details class="faq">
+        <summary>Kezdő vagyok. Nekem is való?</summary>
+        <p>Igen. A tervet a jelenlegi szintedhez igazítjuk, és az első hetekben a helyes technika megtanulásán van a hangsúly.</p>
+      </details>
+      <details class="faq">
+        <summary>Van ízületi problémám. Mit tehetünk?</summary>
+        <p>A felmérésnél rákérdezek az érintett ízületekre, és a gyakorlatválasztás és a terhelés ehhez igazodik. Orvosi diagnózist és kezelést nem helyettesít; ha kell, egyeztess előtte orvossal vagy gyógytornásszal.</p>
+      </details>
+      <details class="faq">
+        <summary>Mire van szükségem az online coachinghoz?</summary>
+        <p>Egy okostelefonra vagy számítógépre az alkalmazáshoz, és arra az eszközparkra, amihez hozzáférsz. Konditerem, otthoni súlyzók vagy saját testsúly, mindegyikkel lehet dolgozni.</p>
+      </details>
+      <details class="faq">
+        <summary>Hogyan tudok fizetni?</summary>
+        <p>A konzultáción megbeszéljük. A számlázási adataidat az alkalmazásban adhatod meg.</p>
+      </details>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .plans { margin-top: 2.5rem; align-items: stretch; }
+  .plan { display: flex; flex-direction: column; position: relative; }
+  .plan h2 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+  .plan .check-list { margin: 1rem 0 1.5rem; }
+  .plan .btn { margin-top: auto; }
+  .price { font-weight: 700; }
+  .featured { border: 2px solid var(--black); box-shadow: 6px 6px 0 var(--lime); }
+  .badge {
+    position: absolute;
+    top: -0.8rem;
+    right: 1.25rem;
+    background: var(--magenta);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+  }
+  .faq { border-bottom: 1px solid var(--line); padding: 1rem 0; }
+  .faq summary { cursor: pointer; font-weight: 700; }
+  .faq p { margin: 0.75rem 0 0; color: var(--muted); }
+</style>

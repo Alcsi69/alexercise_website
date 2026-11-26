@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPosts } from '../../utils';
+
+const posts = await getPosts();
+---
+<Base title="Blog" description="Edzés, táplálkozás és fejlődés: írások az Alexercise blogon.">
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Blog</span>
+      <h1>Írások edzésről és fejlődésről</h1>
+      <p class="lead">Gyakorlati tippek, edzéselmélet érthetően, és amit az ügyfeleimtől tanulok.</p>
+      {posts.length === 0
+        ? <p class="muted">Hamarosan érkeznek az első bejegyzések.</p>
+        : <div class="grid grid-3 list">{posts.map((post) => <PostCard post={post} />)}</div>}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .list { margin-top: 2.5rem; }
+</style>

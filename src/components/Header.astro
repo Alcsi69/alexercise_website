@@ -1,0 +1,98 @@
+---
+import Logo from './Logo.astro';
+import { NAV } from '../site';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<header class="header">
+  <div class="container bar">
+    <Logo />
+    <details class="menu">
+      <summary aria-label="Menü">
+        <span class="burger" aria-hidden="true"></span>
+      </summary>
+      <nav aria-label="Fő navigáció">
+        <ul>
+          {NAV.map((item) => (
+            <li><a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a></li>
+          ))}
+        </ul>
+        <a class="btn btn-primary cta" href="/kapcsolat">Jelentkezem</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(247, 247, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar { display: flex; align-items: center; justify-content: space-between; min-height: 4rem; }
+  summary { list-style: none; cursor: pointer; padding: 0.75rem; margin-right: -0.75rem; }
+  summary::-webkit-details-marker { display: none; }
+  .burger, .burger::before, .burger::after {
+    display: block; width: 22px; height: 2px; background: var(--black); border-radius: 2px; position: relative; transition: transform 0.2s;
+  }
+  .burger::before, .burger::after { content: ''; position: absolute; left: 0; }
+  .burger::before { top: -7px; }
+  .burger::after { top: 7px; }
+  .menu[open] .burger { background: transparent; }
+  .menu[open] .burger::before { transform: translateY(7px) rotate(45deg); }
+  .menu[open] .burger::after { transform: translateY(-7px) rotate(-45deg); }
+
+  nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+    padding: 0.5rem 1rem 1.25rem;
+  }
+  ul { list-style: none; margin: 0; padding: 0; }
+  nav li a {
+    display: block;
+    padding: 0.75rem 0;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid var(--line);
+  }
+  nav a[aria-current='page'] { color: var(--blue); }
+  .cta { margin-top: 1rem; width: 100%; }
+
+  @media (min-width: 860px) {
+    summary { display: none; }
+    /* Desktop: always show the nav, even before the script below runs. */
+    .menu::details-content { content-visibility: visible; display: contents; }
+    nav {
+      position: static;
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      padding: 0;
+      border: 0;
+      background: none;
+    }
+    ul { display: flex; gap: 1.5rem; }
+    nav li a { padding: 0.25rem 0; border: 0; border-bottom: 2px solid transparent; }
+    nav li a:hover { color: var(--blue); }
+    nav a[aria-current='page'] { border-bottom-color: var(--lime); color: var(--text); }
+    .cta { margin: 0; width: auto; min-height: 2.6rem; padding: 0.5rem 1.1rem; }
+  }
+</style>
+
+<script>
+  // Keep the <details> menu open on desktop and close it after navigating on mobile.
+  const menu = document.querySelector<HTMLDetailsElement>('.menu');
+  const mq = window.matchMedia('(min-width: 860px)');
+  const sync = () => { if (menu) menu.open = mq.matches; };
+  sync();
+  mq.addEventListener('change', sync);
+</script>

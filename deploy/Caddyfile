@@ -2,13 +2,13 @@
 # next to the existing alexercise.app / api.alexercise.app blocks, then:
 #   sudo caddy validate --config /etc/caddy/Caddyfile && sudo systemctl reload caddy
 #
-# Replace SITE_DOMAIN with the website's domain (and its www variant if you use one).
+# Domain: alexercise.fit (www.alexercise.fit redirects to it).
 # Caddy gets the HTTPS certificate automatically once DNS points at the VPS.
 
-SITE_DOMAIN, www.SITE_DOMAIN {
+alexercise.fit, www.alexercise.fit {
 	# Canonical address without www.
-	@www host www.SITE_DOMAIN
-	redir @www https://SITE_DOMAIN{uri} permanent
+	@www host www.alexercise.fit
+	redir @www https://alexercise.fit{uri} permanent
 
 	encode zstd gzip
 

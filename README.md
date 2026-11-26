@@ -65,10 +65,9 @@ Brand palette (same as the app): `#2563eb` blue, `#ccff00` lime (primary buttons
 - Fill in the real contact details in `src/site.ts` (the email is a placeholder).
 - Replace the bio on `src/pages/rolam.astro` and add a photo.
 - Optionally add prices in `src/pages/szolgaltatasok.astro`.
-- Set the `SITE_URL` repository variable in GitHub to the final domain (used for canonical links, the sitemap and RSS).
 - The contact form opens the visitor's email app by default. To receive submissions directly, set `formAction` in `src/site.ts` to a form service endpoint.
 
 ## Hosting
 
-Hosted on the VPS behind Caddy, deployed automatically by GitHub Actions on every push to `main`.
+Live at **https://alexercise.fit**, hosted on the VPS behind Caddy, deployed automatically by GitHub Actions on every push to `main`.
 Setup and details: [deploy/README.md](deploy/README.md).

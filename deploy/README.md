@@ -14,7 +14,14 @@ Until the steps below are done, the workflow only builds (the deploy job is skip
 
 ### 1. DNS
 
-Point the website's domain (and `www.` if you want it) at the VPS: an `A` record with the VPS's public IP.
+At the registrar for **alexercise.fit**, add two `A` records pointing at the VPS's public IP (the same IP alexercise.app uses):
+
+| Name | Type | Value |
+| --- | --- | --- |
+| `@` (alexercise.fit) | A | VPS IP |
+| `www` | A | VPS IP |
+
+`www.alexercise.fit` redirects to `alexercise.fit`.
 
 ### 2. Server: deploy user and folder
 
@@ -30,8 +37,8 @@ and prints the values for step 4. It doesn't touch the app, the API or Caddy.
 
 ### 3. Server: Caddy
 
-Open `deploy/Caddyfile`, replace `SITE_DOMAIN` with the real domain, and append the block to
-`/etc/caddy/Caddyfile` on the VPS. Then:
+Append the block from `deploy/Caddyfile` to `/etc/caddy/Caddyfile` on the VPS, below the existing
+alexercise.app blocks (leave those as they are). Then:
 
 ```bash
 sudo caddy validate --config /etc/caddy/Caddyfile
@@ -56,7 +63,7 @@ Variables:
 
 | Name | Value |
 | --- | --- |
-| `SITE_URL` | `https://your-domain` (used for the sitemap, RSS and canonical links) |
+| `SITE_URL` | `https://alexercise.fit` (lets the deploy check the live site) |
 | `DEPLOY_ENABLED` | `true` (turns the deploy job on) |
 | `DEPLOY_PATH` | Only if you use a folder other than `/var/www/alexercise-website` |
 
@@ -75,6 +82,6 @@ If a deploy fails, the previous version stays online, and the run's log in the A
 From your own computer, if you have SSH access as `deploy`:
 
 ```bash
-SITE_URL=https://your-domain npm run build
+npm run build
 rsync -az --delete dist/ deploy@YOUR_VPS_IP:/var/www/alexercise-website/
 ```

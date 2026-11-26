@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site';
+---
+<Base title="Kapcsolat" description="Jelentkezz ingyenes konzultációra az Alexercise-nál.">
+  <section class="section">
+    <div class="container contact">
+      <div>
+        <span class="eyebrow">Kapcsolat</span>
+        <h1>Beszéljünk!</h1>
+        <p class="lead">Írd meg röviden, mi a célod, és hamarosan jelentkezem egy időpont-javaslattal az ingyenes konzultációra.</p>
+        <ul class="direct">
+          <li><span class="muted">Email</span><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+          {SITE.phone && <li><span class="muted">Telefon</span><a href={`tel:${SITE.phone.replace(/\s/g, '')}`}>{SITE.phone}</a></li>}
+          {SITE.instagram && <li><span class="muted">Instagram</span><a href={SITE.instagram} rel="noopener">{SITE.instagram.replace(/^https?:\/\/(www\.)?/, '')}</a></li>}
+          {SITE.location && <li><span class="muted">Helyszín</span><span>{SITE.location}</span></li>}
+        </ul>
+      </div>
+
+      <form class="card form" id="contact" method="post" action={SITE.formAction || undefined} data-mailto={SITE.formAction ? undefined : SITE.email}>
+        <label>
+          Név
+          <input name="name" autocomplete="name" required />
+        </label>
+        <label>
+          Email
+          <input name="email" type="email" autocomplete="email" required />
+        </label>
+        <label>
+          Mi érdekel?
+          <select name="service">
+            <option>Személyi edzés</option>
+            <option>Online coaching</option>
+            <option>Egyéni edzésterv</option>
+            <option>Még nem tudom</option>
+          </select>
+        </label>
+        <label>
+          Üzenet
+          <textarea name="message" rows="5" placeholder="Célok, tapasztalat, mikor érsz rá…" required></textarea>
+        </label>
+        <button class="btn btn-primary" type="submit">Küldés</button>
+        {!SITE.formAction && <p class="muted small">A Küldés gombra az email programod nyílik meg a kitöltött üzenettel.</p>}
+      </form>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact { display: grid; gap: 3rem; }
+  @media (min-width: 860px) { .contact { grid-template-columns: 1fr 1fr; gap: 4rem; } }
+  .direct { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1rem; }
+  .direct li { display: grid; gap: 0.1rem; }
+  .direct .muted { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .direct a { font-weight: 700; font-size: 1.15rem; }
+  .form { display: grid; gap: 1.1rem; padding: 1.75rem; }
+  label { display: grid; gap: 0.35rem; font-weight: 650; font-size: 0.95rem; }
+  input, select, textarea {
+    font: inherit;
+    font-weight: 400;
+    padding: 0.75rem 0.9rem;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--text);
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px #2563eb33; }
+  .small { font-size: 0.85rem; margin: 0; }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#contact');
+  const select = form?.querySelector<HTMLSelectElement>('select[name="service"]');
+  // Preselect the service when arriving from the Services page (?szolgaltatas=...).
+  const wanted = new URLSearchParams(location.search).get('szolgaltatas');
+  if (select && wanted) select.value = wanted;
+
+  // Without a form backend, open the visitor's email app with the message filled in.
+  const to = form?.dataset.mailto;
+  if (form && to) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d = new FormData(form);
+      const subject = `Jelentkezés: ${d.get('service')}`;
+      const body = `Név: ${d.get('name')}\nEmail: ${d.get('email')}\nÉrdeklődés: ${d.get('service')}\n\n${d.get('message')}`;
+      location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+  }
+</script>

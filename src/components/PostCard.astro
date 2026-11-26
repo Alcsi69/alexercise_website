@@ -1,0 +1,24 @@
+---
+import type { Post } from '../utils';
+import { formatDate } from '../utils';
+interface Props { post: Post }
+const { post } = Astro.props;
+---
+<article class="card post">
+  <p class="meta muted"><time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>{post.data.draft && <span class="tag"> vázlat</span>}</p>
+  <h3><a href={`/blog/${post.id}`}>{post.data.title}</a></h3>
+  <p class="muted">{post.data.description}</p>
+  {post.data.tags.length > 0 && (
+    <p class="tags">{post.data.tags.map((t) => <span class="tag">{t}</span>)}</p>
+  )}
+</article>
+
+<style>
+  .post { position: relative; display: flex; flex-direction: column; transition: border-color 0.15s, transform 0.15s; }
+  .post:hover { border-color: var(--blue); transform: translateY(-2px); }
+  .meta { font-size: 0.9rem; margin-bottom: 0.4rem; }
+  h3 a { color: var(--text); text-decoration: none; }
+  /* Whole card is clickable. */
+  h3 a::after { content: ''; position: absolute; inset: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto; padding-top: 0.5rem; }
+</style>

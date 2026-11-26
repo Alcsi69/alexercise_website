@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { SITE } from '../site';
+// TODO(Alex): replace the bio and add your qualifications and a photo (put it in public/ and use <img src="/alex.jpg">).
+---
+<Base title="Rólam" description={`${SITE.coach}, az Alexercise személyi edzője.`}>
+  <section class="section">
+    <div class="container about">
+      <div class="photo" aria-hidden="true">
+        <span>A</span>
+      </div>
+      <div class="narrow">
+        <span class="eyebrow">Rólam</span>
+        <h1>Szia, {SITE.coach} vagyok!</h1>
+        <p class="lead">Személyi edző, az Alexercise alapítója. Abban segítek, hogy az edzés a hétköznapjaid fenntartható része legyen, ne egy újabb félbehagyott fogadalom.</p>
+        <h2>Amiben hiszek</h2>
+        <ul class="check-list">
+          <li><strong>A következetesség többet ér a tökéletességnél.</strong> Olyan tervet kapsz, amit a valós heted mellett is tartani tudsz.</li>
+          <li><strong>Mérni kell, nem tippelni.</strong> Minden sorozatot rögzítünk, így a fejlődés látható, és a terv adatokra épül.</li>
+          <li><strong>Az ízületeid is számítanak.</strong> A terhelést a tested jelzéseihez igazítjuk, nem fordítva.</li>
+          <li><strong>A technika az első.</strong> A súly majd jön magától.</li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/kapcsolat">Írj nekem</a>
+          <a class="btn btn-ghost" href="/szolgaltatasok">Szolgáltatások</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</Base>
+
+<style>
+  .about { display: grid; gap: 2.5rem; align-items: start; }
+  @media (min-width: 860px) { .about { grid-template-columns: 22rem 1fr; gap: 4rem; } }
+  .photo {
+    aspect-ratio: 4 / 5;
+    max-width: 22rem;
+    border-radius: var(--radius);
+    background: var(--black);
+    display: grid;
+    place-items: center;
+    box-shadow: 10px 10px 0 var(--lime);
+  }
+  .photo span { font-size: 8rem; font-weight: 900; color: var(--blue); }
+  h2 { margin-top: 2rem; font-size: 1.5rem; }
+</style>

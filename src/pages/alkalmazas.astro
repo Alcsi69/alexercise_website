@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site';
+
+const features = [
+  { title: 'Edzői tervek', text: 'Az általam összeállított terv automatikusan megjelenik a telefonodon, megjegyzésekkel együtt.' },
+  { title: 'Edzésnapló', text: 'Sorozatonként rögzíted a súlyt, az ismétlést és az RPE-t. Edzés közben is cserélhetsz vagy hozzáadhatsz gyakorlatot.' },
+  { title: 'Pihenőidő-mérő', text: 'Beépített időzítő, hogy ne kelljen a telefonod órájával bajlódni.' },
+  { title: 'Fejlődés és csúcsok', text: 'Látod, mit emeltél legutóbb, mennyi a becsült maximumod, és mikor döntöttél új egyéni csúcsot.' },
+  { title: 'Futás is', text: 'Táv, idő, tempó és érzet. Erő- és futóedzés egy helyen.' },
+  { title: 'Időpontfoglalás', text: 'Személyes vagy online alkalmat foglalhatsz a szabad időpontjaimra, közvetlenül az appból.' },
+  { title: 'Tárcsakalkulátor', text: 'Megmutatja, milyen tárcsákat tegyél a rúd egy-egy oldalára.' },
+  { title: 'Offline is működik', text: 'Konditeremben gyenge a térerő? Semmi gond, az adatok internetkapcsolat nélkül is mentődnek, és később szinkronizálódnak.' },
+];
+---
+<Base title="Alkalmazás" description="Az Alexercise alkalmazás: edzői tervek, edzésnapló, fejlődéskövetés és időpontfoglalás egy helyen.">
+  <section class="section dark intro">
+    <div class="container narrow">
+      <span class="eyebrow">Alexercise app</span>
+      <h1>Minden edzésed egy helyen</h1>
+      <p class="lead">Az alkalmazást az ügyfeleimnek készítettem. Telefonon és böngészőben is fut, és a kezdőképernyőre is kiteheted.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href={SITE.app.url}>App megnyitása</a>
+        <a class="btn btn-ghost" href={SITE.app.loginUrl}>Bejelentkezés</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-2 features">
+        {features.map((f) => (
+          <div class="feature">
+            <h2>{f.title}</h2>
+            <p class="muted">{f.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container narrow card how">
+      <h2>Így kezdheted el</h2>
+      <ol>
+        <li>Nyisd meg az appot a <a href={SITE.app.url}>{SITE.app.url.replace('https://', '')}</a> címen.</li>
+        <li>Töltsd ki a rövid kérdőívet és hozd létre a fiókodat.</li>
+        <li>Telefonon a böngésző menüjében válaszd a <em>Hozzáadás a kezdőképernyőhöz</em> lehetőséget.</li>
+        <li>Ha már edzel velem, a terved szinkronizálás után megjelenik a Sablonok fülön.</li>
+      </ol>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro { padding: 4.5rem 0; }
+  .features { gap: 2.5rem 3rem; }
+  .feature { border-top: 3px solid var(--black); padding-top: 1rem; }
+  .feature h2 { font-size: 1.25rem; margin-bottom: 0.4rem; }
+  .feature:nth-child(4n + 1) { border-color: var(--blue); }
+  .feature:nth-child(4n + 2) { border-color: var(--lime); }
+  .feature:nth-child(4n + 3) { border-color: var(--magenta); }
+  .how ol { padding-left: 1.25rem; margin: 0; }
+  .how li { margin-bottom: 0.5rem; }
+</style>

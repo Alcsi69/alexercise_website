@@ -1,0 +1,62 @@
+# Builds the site and uploads it to the VPS on every push to main.
+# One-time setup (secrets, server user, Caddy): see deploy/README.md.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: dist/
+          retention-days: 7
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    # Skip (instead of failing) until the VPS secrets are configured.
+    if: ${{ vars.DEPLOY_ENABLED == 'true' }}
+    environment:
+      name: production
+      url: ${{ vars.SITE_URL }}
+    env:
+      DEPLOY_PATH: ${{ vars.DEPLOY_PATH || '/var/www/alexercise-website' }}
+      SSH_PORT: ${{ secrets.VPS_PORT || '22' }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: dist
+      - name: Set up SSH
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+      - name: Upload with rsync
+        run: |
+          rsync -az --delete --delay-updates \
+            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT -o StrictHostKeyChecking=yes" \
+            dist/ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:$DEPLOY_PATH/"
+      - name: Check the live site
+        if: ${{ vars.SITE_URL != '' }}
+        run: curl --fail --silent --show-error --retry 3 --retry-delay 5 -o /dev/null "${{ vars.SITE_URL }}"
